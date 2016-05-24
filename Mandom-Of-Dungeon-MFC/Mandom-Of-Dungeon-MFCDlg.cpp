@@ -64,6 +64,7 @@ BEGIN_MESSAGE_MAP(CMandomOfDungeonMFCDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+//	ON_BN_CLICKED(IDC_GROUP_DUNGEON, &CMandomOfDungeonMFCDlg::OnBnClickedGroupDungeon)
 END_MESSAGE_MAP()
 
 
@@ -151,4 +152,3 @@ HCURSOR CMandomOfDungeonMFCDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
-
