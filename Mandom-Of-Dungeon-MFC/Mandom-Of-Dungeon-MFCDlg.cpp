@@ -51,13 +51,87 @@ END_MESSAGE_MAP()
 
 CMandomOfDungeonMFCDlg::CMandomOfDungeonMFCDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_MANDOMOFDUNGEONMFC_DIALOG, pParent)
+	, turn_draw_monster(_T(""))
+	, dungeon_monster_left(0)
+	, dungeon_armor_left(0)
+	, battle_monster(_T(""))
+	, battle_monster_damage(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	player_id_0 = _T("");
+	player_id_1 = _T("");
+	player_id_2 = _T("");
+	player_id_3 = _T("");
+	player_life_point_0 = 0;
+	player_life_point_1 = 0;
+	player_life_point_2 = 0;
+	player_life_point_3 = 0;
+	player_victory_point_0 = 0;
+	player_victory_point_1 = 0;
+	player_victory_point_2 = 0;
+	player_victory_point_3 = 0;
+	round_deck_size = 0;
+	round_dungeon_size = 0;
 }
 
 void CMandomOfDungeonMFCDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+
+	DDX_Text(pDX, IDC_PLAYER_ID_0, player_id_0);
+	DDX_Text(pDX, IDC_PLAYER_ID_1, player_id_1);
+	DDX_Text(pDX, IDC_PLAYER_ID_2, player_id_2);
+	DDX_Text(pDX, IDC_PLAYER_ID_3, player_id_3);
+
+	DDX_Text(pDX, IDC_PLAYER_LIFE_POINT_0, player_life_point_0);
+	DDX_Text(pDX, IDC_PLAYER_LIFE_POINT_1, player_life_point_1);
+	DDX_Text(pDX, IDC_PLAYER_LIFE_POINT_2, player_life_point_2);
+	DDX_Text(pDX, IDC_PLAYER_LIFE_POINT_3, player_life_point_3);
+
+	DDX_Text(pDX, IDC_PLAYER_VICTORY_POINT_0, player_victory_point_0);
+	DDX_Text(pDX, IDC_PLAYER_VICTORY_POINT_1, player_victory_point_1);
+	DDX_Text(pDX, IDC_PLAYER_VICTORY_POINT_2, player_victory_point_2);
+	DDX_Text(pDX, IDC_PLAYER_VICTORY_POINT_3, player_victory_point_3);
+
+	DDX_Control(pDX, IDC_PLAYER_TURN_0, player_turn_0);
+	DDX_Control(pDX, IDC_PLAYER_TURN_1, player_turn_1);
+	DDX_Control(pDX, IDC_PLAYER_TURN_2, player_turn_2);
+	DDX_Control(pDX, IDC_PLAYER_TURN_3, player_turn_3);
+
+
+
+	DDX_Control(pDX, IDC_GROUP_PLAYERS, group_players);
+	DDX_Control(pDX, IDC_GROUP_ROUND, group_round);
+	DDX_Control(pDX, IDC_GROUP_DUNGEON, group_dungeon);
+	DDX_Control(pDX, IDC_GROUP_BATTLE, group_battle);
+
+	DDX_Control(pDX, IDC_ROUND_WEAPON_TORCH, round_weapon_torch);
+	DDX_Control(pDX, IDC_ROUND_WEAPON_HOLY_GRAIL, round_weapon_holy_grail);
+	DDX_Control(pDX, IDC_ROUND_WEAPON_SPEAR, round_weapon_spear);
+	DDX_Control(pDX, IDC_ROUND_WEAPON_ARMOR, round_weapon_armor);
+	DDX_Control(pDX, IDC_ROUND_WEAPON_SHIELD, round_weapon_shield);
+	DDX_Control(pDX, IDC_ROUND_WEAPON_HERO_SWORD, round_weapon_hero_sword);
+
+	DDX_Text(pDX, IDC_ROUND_DECK_SIZE, round_deck_size);
+	DDX_Text(pDX, IDC_ROUND_DUNGEON_SIZE, round_dungeon_size);
+
+
+
+	DDX_Control(pDX, IDC_TURN_DRAW, turn_action_draw);
+	DDX_Control(pDX, IDC_TURN_PASS, turn_action_pass);
+
+	DDX_Control(pDX, IDC_TURN_REMOVE_MONSTER, turn_action_remove_moster);
+	DDX_Control(pDX, IDC_TURN_ADD_MONSTER, turn_action_add_monster);
+
+
+
+
+	DDX_Text(pDX, IDC_DUNGEON_MONSTER_LEFT, dungeon_monster_left);
+	DDX_Text(pDX, IDC_DUNGEON_ARMOR_LEFT, dungeon_armor_left);
+
+
+	DDX_Text(pDX, IDC_BATTLE_MONSTER, battle_monster);
+	DDX_Text(pDX, IDC_BATTLE_DAMAGE, battle_monster_damage);
 }
 
 BEGIN_MESSAGE_MAP(CMandomOfDungeonMFCDlg, CDialogEx)
@@ -65,6 +139,7 @@ BEGIN_MESSAGE_MAP(CMandomOfDungeonMFCDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 //	ON_BN_CLICKED(IDC_GROUP_DUNGEON, &CMandomOfDungeonMFCDlg::OnBnClickedGroupDungeon)
+ON_BN_CLICKED(IDC_BUTTON_UPDATE, &CMandomOfDungeonMFCDlg::OnBnClickedButtonUpdate)
 END_MESSAGE_MAP()
 
 
@@ -151,4 +226,125 @@ void CMandomOfDungeonMFCDlg::OnPaint()
 HCURSOR CMandomOfDungeonMFCDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
+}
+
+
+void CMandomOfDungeonMFCDlg::OnBnClickedButtonUpdate()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdatePlayers();
+	UpdateRound();
+	UpdateTurn();
+	UpdateDungeon();
+	UpdateBattle();
+
+}
+void CMandomOfDungeonMFCDlg::InvalidateStatic(CStatic * pStatic)
+{
+	CRect rect;
+	pStatic->GetWindowRect(&rect);
+
+	CPoint & pointTopLeft = rect.TopLeft();
+	CPoint & pointBottomRight = rect.BottomRight();
+	ScreenToClient(&pointTopLeft);
+	ScreenToClient(&pointBottomRight);
+
+	InvalidateRect(rect);
+}
+
+void CMandomOfDungeonMFCDlg::UpdatePlayers()
+{
+	UpdateData();
+
+	player_turn_0.SetCheck(!player_turn_0.GetCheck());
+	player_turn_1.SetCheck(!player_turn_1.GetCheck());
+	player_turn_2.SetCheck(!player_turn_2.GetCheck());
+	player_turn_3.SetCheck(!player_turn_3.GetCheck());
+
+	player_id_0 = "player 0 id";
+	player_id_1 = "player 1 id";
+	player_id_2 = "player 2 id";
+	player_id_3 = "player 3 id";
+
+	player_life_point_0++;
+	player_life_point_1++;
+	player_life_point_2++;
+	player_life_point_3++;
+
+	player_victory_point_0++;
+	player_victory_point_1++;
+	player_victory_point_2++;
+	player_victory_point_3++;
+
+	UpdateData(FALSE);
+
+	InvalidateStatic(&group_players);
+}
+
+
+
+
+void CMandomOfDungeonMFCDlg::UpdateRound()
+{
+	UpdateData();
+	
+	round_deck_size++;
+	round_dungeon_size++;
+
+	round_weapon_armor.EnableWindow(!round_weapon_armor.IsWindowEnabled());
+	round_weapon_hero_sword.EnableWindow(!round_weapon_hero_sword.IsWindowEnabled());
+	round_weapon_holy_grail.EnableWindow(!round_weapon_holy_grail.IsWindowEnabled());
+
+	round_weapon_shield.EnableWindow(!round_weapon_shield.IsWindowEnabled());
+	round_weapon_spear.EnableWindow(!round_weapon_spear.IsWindowEnabled());
+	round_weapon_torch.EnableWindow(!round_weapon_torch.IsWindowEnabled());
+
+	UpdateData(FALSE);
+
+	InvalidateStatic(&group_round);
+}
+
+
+
+void CMandomOfDungeonMFCDlg::UpdateTurn()
+{
+	UpdateData();
+
+	turn_action_pass.EnableWindow(!turn_action_pass.IsWindowEnabled());
+	turn_action_draw.EnableWindow(!turn_action_draw.IsWindowEnabled());
+
+	turn_action_add_monster.EnableWindow(!turn_action_add_monster.IsWindowEnabled());
+	turn_action_remove_moster.EnableWindow(!turn_action_remove_moster.IsWindowEnabled());
+
+	UpdateData(FALSE);
+
+	InvalidateStatic(&group_round);
+}
+
+
+
+
+void CMandomOfDungeonMFCDlg::UpdateDungeon()
+{
+	UpdateData();
+
+	dungeon_monster_left++;
+	dungeon_armor_left++;
+
+	UpdateData(FALSE);
+
+	InvalidateStatic(&group_dungeon);
+}
+
+
+void CMandomOfDungeonMFCDlg::UpdateBattle()
+{
+	UpdateData();
+
+	battle_monster = "no name";
+	battle_monster_damage++;
+
+	UpdateData(FALSE);
+
+	InvalidateStatic(&group_battle);
 }
