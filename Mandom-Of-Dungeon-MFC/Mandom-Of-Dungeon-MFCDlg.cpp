@@ -56,7 +56,6 @@ CMandomOfDungeonMFCDlg::CMandomOfDungeonMFCDlg(CWnd* pParent /*=NULL*/)
 	, dungeon_armor_left(0)
 	, battle_monster(_T(""))
 	, battle_monster_damage(0)
-	, dungeon_event(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	player_id_0 = _T("");
@@ -241,7 +240,6 @@ void CMandomOfDungeonMFCDlg::OnBnClickedButtonUpdate()
 	UpdateTurn();
 	UpdateDungeon();
 	UpdateBattle();
-	UpdateEvent();
 	UpdateEventList();
 
 }
@@ -355,17 +353,8 @@ void CMandomOfDungeonMFCDlg::UpdateBattle()
 	InvalidateStatic(&group_battle);
 }
 
-//void CMandomOfDungeonMFCDlg::UpdateEvent()
-//{
-//	UpdateData();
-//	dungeon_event += "event xxx aaa bbb\n";
-//	UpdateData(FALSE);
-//	Invalidate();
-//}
-
 void CMandomOfDungeonMFCDlg::UpdateEventList()
 {
 	CString new_event_str = _T("event xxx aaa bbb");
 	list_box_event.AddString(new_event_str);
-	Invalidate();
 }
