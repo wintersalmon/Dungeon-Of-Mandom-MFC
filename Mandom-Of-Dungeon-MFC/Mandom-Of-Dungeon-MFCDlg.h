@@ -82,4 +82,8 @@ public:
 	CString battle_monster;
 	int battle_monster_damage;
 	void UpdateTurn();
+//	void UpdateEvent();
+//	CString dungeon_event;
+	CListBox list_box_event;
+	void UpdateEventList();
 };
