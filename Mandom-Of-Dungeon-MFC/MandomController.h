@@ -23,5 +23,9 @@ public:
 	CString GetPlayerName(int playerNumber);
 	PyObject *pyGetDrawMonsterName;
 	CString GetDrawMonsterName();
+	CString GetBattleMonsterName();
+	PyObject *pyHasPlayerPassed;
+	bool HasPlayerPassed(int PlayerNumber);
+	bool ActionTurnPass();
 };
 

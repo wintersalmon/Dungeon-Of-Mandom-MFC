@@ -9,6 +9,7 @@ MandomController::MandomController()
 	, pyGetPlayerVictoryPoint(NULL)
 	, pyGetPlayerName(NULL)
 	, pyGetDrawMonsterName(NULL)
+	, pyHasPlayerPassed(NULL)
 {
 	Py_Initialize();
 
@@ -32,6 +33,8 @@ MandomController::MandomController()
 	//pyGetDrawMonsterName = PyDict_GetItemString(pyDict, "get_draw_monster_name");
 	//assert(pyGetDrawMonsterName != NULL);
 
+	pyHasPlayerPassed = PyDict_GetItemString(pyDict, "has_player_passed");
+	assert(pyHasPlayerPassed != NULL);
 }
 
 
@@ -148,8 +151,6 @@ int MandomController::GetHeroRemaingArmor()
 
 
 
-
-
 CString MandomController::GetDrawMonsterName()
 {
 	PyObject * monster_name = PyObject_CallMethod(pyModule, "get_draw_monster_name", NULL);
@@ -159,4 +160,38 @@ CString MandomController::GetDrawMonsterName()
 	CString name(name_c);
 	Py_DECREF(monster_name);
 	return name;
+}
+
+
+CString MandomController::GetBattleMonsterName()
+{
+	PyObject * monster_name = PyObject_CallMethod(pyModule, "get_battle_monster_name", NULL);
+	PyObject * utf_name = PyUnicode_AsUTF8String(monster_name);
+	char * name_c = PyBytes_AsString(utf_name);
+	assert(monster_name != NULL);
+	CString name(name_c);
+	Py_DECREF(monster_name);
+	return name;
+}
+
+
+bool MandomController::HasPlayerPassed(int PlayerNumber)
+{
+	PyObject * number = PyLong_FromLong((long)PlayerNumber);
+	PyObject * args = PyTuple_Pack(1, number);
+	PyObject * player_passed = PyObject_CallObject(pyHasPlayerPassed, args);
+	assert(player_passed != NULL);
+	bool passed = PyBool_Check(player_passed);
+	Py_DECREF(player_passed);
+	return passed;
+}
+
+
+bool MandomController::ActionTurnPass()
+{
+	PyObject * turn_passed = PyObject_CallMethod(pyModule, "action_turn_pass", NULL);
+	assert(turn_passed != NULL);
+	bool result = PyObject_IsTrue(turn_passed);
+	Py_DECREF(turn_passed);
+	return result;
 }
