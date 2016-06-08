@@ -94,4 +94,10 @@ public:
 	bool turn_card_opened;
 	afx_msg void OnBnClickedTurnDraw();
 	afx_msg void OnBnClickedTurnAddMonster();
+	afx_msg void OnBnClickedRoundWeaponTorch();
+	afx_msg void OnBnClickedRoundWeaponHolyGrail();
+	afx_msg void OnBnClickedRoundWeaponSpear();
+	afx_msg void OnBnClickedRoundWeaponArmor();
+	afx_msg void OnBnClickedRoundWeaponShield();
+	afx_msg void OnBnClickedRoundWeaponHeroSword();
 };

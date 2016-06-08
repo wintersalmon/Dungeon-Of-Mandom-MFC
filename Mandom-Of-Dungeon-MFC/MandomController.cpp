@@ -11,6 +11,8 @@ MandomController::MandomController()
 	, pyGetDrawMonsterName(NULL)
 	, pyHasPlayerPassed(NULL)
 	, pyGetEvent(NULL)
+	, pyActionRemoveWeapon(NULL)
+	, pyHasWeapon(NULL)
 {
 	Py_Initialize();
 
@@ -39,6 +41,12 @@ MandomController::MandomController()
 
 	pyGetEvent = PyDict_GetItemString(pyDict, "get_event");
 	assert(pyGetEvent != NULL);
+
+	pyActionRemoveWeapon = PyDict_GetItemString(pyDict, "action_turn_weapon_remove");
+	assert(pyActionRemoveWeapon != NULL);
+
+	pyHasWeapon = PyDict_GetItemString(pyDict, "has_weapon");
+	assert(pyHasWeapon != NULL);
 }
 
 
@@ -245,3 +253,25 @@ CString MandomController::GetEvent(int idx)
 	Py_DECREF(event_name);
 	return name;}
 
+
+
+bool MandomController::ActionTurnWeaponRemove(int weaponNumber)
+{
+	PyObject * number = PyLong_FromLong((long)weaponNumber);
+	PyObject * args = PyTuple_Pack(1, number);
+	PyObject * result = PyObject_CallObject(pyActionRemoveWeapon, args);
+	int i_result = PyLong_AsLong(result);
+	Py_DECREF(result);
+	return i_result;
+}
+
+
+bool MandomController::HasWeapon(int weaponNumber)
+{
+	PyObject * number = PyLong_FromLong((long)weaponNumber);
+	PyObject * args = PyTuple_Pack(1, number);
+	PyObject * result = PyObject_CallObject(pyHasWeapon, args);
+	int i_result = PyLong_AsLong(result);
+	Py_DECREF(result);
+	return i_result;
+}

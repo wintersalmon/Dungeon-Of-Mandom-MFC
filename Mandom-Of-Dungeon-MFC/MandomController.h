@@ -33,5 +33,9 @@ public:
 	CString GetEvent(int idx);
 	PyObject *pyGetEvent;
 	bool ActionTurnMonsterAddToDungeon();
+	PyObject* pyActionRemoveWeapon;
+	bool ActionTurnWeaponRemove(int weaponNumber);
+	PyObject* pyHasWeapon;
+	bool HasWeapon(int weaponNumber);
 };
 

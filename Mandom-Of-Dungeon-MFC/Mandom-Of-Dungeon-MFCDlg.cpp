@@ -150,6 +150,12 @@ ON_BN_CLICKED(IDC_BUTTON_UPDATE, &CMandomOfDungeonMFCDlg::OnBnClickedButtonUpdat
 ON_BN_CLICKED(IDC_TURN_PASS, &CMandomOfDungeonMFCDlg::OnBnClickedTurnPass)
 ON_BN_CLICKED(IDC_TURN_DRAW, &CMandomOfDungeonMFCDlg::OnBnClickedTurnDraw)
 ON_BN_CLICKED(IDC_TURN_ADD_MONSTER, &CMandomOfDungeonMFCDlg::OnBnClickedTurnAddMonster)
+ON_BN_CLICKED(IDC_ROUND_WEAPON_TORCH, &CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponTorch)
+ON_BN_CLICKED(IDC_ROUND_WEAPON_HOLY_GRAIL, &CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponHolyGrail)
+ON_BN_CLICKED(IDC_ROUND_WEAPON_SPEAR, &CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponSpear)
+ON_BN_CLICKED(IDC_ROUND_WEAPON_ARMOR, &CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponArmor)
+ON_BN_CLICKED(IDC_ROUND_WEAPON_SHIELD, &CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponShield)
+ON_BN_CLICKED(IDC_ROUND_WEAPON_HERO_SWORD, &CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponHeroSword)
 END_MESSAGE_MAP()
 
 
@@ -307,15 +313,14 @@ void CMandomOfDungeonMFCDlg::UpdateRound()
 	
 	round_deck_size = mandom->GetDeckSize();
 	round_dungeon_size = mandom->GetDungeonSize();
-	/*
-	round_weapon_armor.EnableWindow(!round_weapon_armor.IsWindowEnabled());
-	round_weapon_hero_sword.EnableWindow(!round_weapon_hero_sword.IsWindowEnabled());
-	round_weapon_holy_grail.EnableWindow(!round_weapon_holy_grail.IsWindowEnabled());
 
-	round_weapon_shield.EnableWindow(!round_weapon_shield.IsWindowEnabled());
-	round_weapon_spear.EnableWindow(!round_weapon_spear.IsWindowEnabled());
-	round_weapon_torch.EnableWindow(!round_weapon_torch.IsWindowEnabled());
-	*/
+	round_weapon_torch.EnableWindow(mandom->HasWeapon(0));
+	round_weapon_holy_grail.EnableWindow(mandom->HasWeapon(1));
+	round_weapon_spear.EnableWindow(mandom->HasWeapon(2));
+	round_weapon_armor.EnableWindow(mandom->HasWeapon(3));
+	round_weapon_shield.EnableWindow(mandom->HasWeapon(4));
+	round_weapon_hero_sword.EnableWindow(mandom->HasWeapon(5));
+
 	UpdateData(FALSE);
 
 	InvalidateStatic(&group_round);
@@ -403,7 +408,6 @@ void CMandomOfDungeonMFCDlg::OnBnClickedTurnPass()
 {
 	if (mandom->ActionTurnPass())
 	{
-		mandom->Update();
 		UpdateAll();
 	}
 }
@@ -418,6 +422,7 @@ void CMandomOfDungeonMFCDlg::UpdateAll()
 	UpdateDungeon();
 	UpdateBattle();
 	UpdateEventList();
+	Invalidate();
 }
 
 
@@ -434,7 +439,72 @@ void CMandomOfDungeonMFCDlg::OnBnClickedTurnAddMonster()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (mandom->ActionTurnMonsterAddToDungeon())
 	{
-		mandom->Update();
+		turn_card_opened = false;
+		UpdateAll();
+	}
+}
+
+
+void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponTorch()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (mandom->ActionTurnWeaponRemove(0))
+	{
+		turn_card_opened = false;
+		UpdateAll();
+	}
+}
+
+
+void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponHolyGrail()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (mandom->ActionTurnWeaponRemove(1))
+	{
+		turn_card_opened = false;
+		UpdateAll();
+	}
+}
+
+
+void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponSpear()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (mandom->ActionTurnWeaponRemove(2))
+	{
+		turn_card_opened = false;
+		UpdateAll();
+	}
+}
+
+
+void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponArmor()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (mandom->ActionTurnWeaponRemove(3))
+	{
+		turn_card_opened = false;
+		UpdateAll();
+	}
+}
+
+
+void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponShield()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (mandom->ActionTurnWeaponRemove(4))
+	{
+		turn_card_opened = false;
+		UpdateAll();
+	}
+}
+
+
+void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponHeroSword()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (mandom->ActionTurnWeaponRemove(5))
+	{
 		turn_card_opened = false;
 		UpdateAll();
 	}
