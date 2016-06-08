@@ -72,7 +72,7 @@ public:
 	CButton round_weapon_armor;
 	CButton round_weapon_shield;
 	CButton round_weapon_hero_sword;
-	CString turn_draw_monster;
+//	CString turn_draw_monster;
 	CButton turn_action_draw;
 	CButton turn_action_pass;
 	CButton turn_action_remove_moster;
@@ -87,4 +87,5 @@ public:
 	CListBox list_box_event;
 	void UpdateEventList();
 	MandomController *mandom;
+	CString turn_draw_monster;
 };

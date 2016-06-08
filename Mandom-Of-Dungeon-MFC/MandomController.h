@@ -11,5 +11,17 @@ public:
 	int GetPlayerLifePoint(int playerNumber);
 //	PyObject pyDict;
 	PyObject *pyDict;
+	PyObject *pyUpdater;
+	int GetDeckSize();
+	int GetDungeonSize();
+	int GetTopMonsterInDeck();
+	int GetHeroRemaingArmor();
+	int GetPlayerVictoryPoint(int playerNumber);
+	PyObject* pyGetPlayerLifePoint;
+	PyObject* pyGetPlayerVictoryPoint;
+	PyObject* pyGetPlayerName;
+	CString GetPlayerName(int playerNumber);
+	PyObject *pyGetDrawMonsterName;
+	CString GetDrawMonsterName();
 };
 

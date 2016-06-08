@@ -126,6 +126,7 @@ void CMandomOfDungeonMFCDlg::DoDataExchange(CDataExchange* pDX)
 
 
 
+	DDX_Text(pDX, IDC_TRUN_DRAW_MONSTER, turn_draw_monster);
 
 	DDX_Text(pDX, IDC_DUNGEON_MONSTER_LEFT, dungeon_monster_left);
 	DDX_Text(pDX, IDC_DUNGEON_ARMOR_LEFT, dungeon_armor_left);
@@ -272,20 +273,20 @@ void CMandomOfDungeonMFCDlg::UpdatePlayers()
 	player_turn_2.SetCheck(!player_turn_2.GetCheck());
 	player_turn_3.SetCheck(!player_turn_3.GetCheck());
 
-	player_id_0 = "player 0 id";
-	player_id_1 = "player 1 id";
-	player_id_2 = "player 2 id";
-	player_id_3 = "player 3 id";
+	player_id_0 = mandom->GetPlayerName(0);
+	player_id_1 = mandom->GetPlayerName(1);
+	player_id_2 = mandom->GetPlayerName(2);
+	player_id_3 = mandom->GetPlayerName(3);
 
-	player_life_point_0++;
-	player_life_point_1++;
-	player_life_point_2++;
-	player_life_point_3++;
-
-	player_victory_point_0++;
-	player_victory_point_1++;
-	player_victory_point_2++;
-	player_victory_point_3++;
+	player_life_point_0 = mandom->GetPlayerLifePoint(0);
+	player_life_point_1 = mandom->GetPlayerLifePoint(1);
+	player_life_point_2 = mandom->GetPlayerLifePoint(2);
+	player_life_point_3 = mandom->GetPlayerLifePoint(3);
+	
+	player_victory_point_0 = mandom->GetPlayerVictoryPoint(0);
+	player_victory_point_1 = mandom->GetPlayerVictoryPoint(1);
+	player_victory_point_2 = mandom->GetPlayerVictoryPoint(2);
+	player_victory_point_3 = mandom->GetPlayerVictoryPoint(3);
 
 	UpdateData(FALSE);
 
@@ -299,8 +300,8 @@ void CMandomOfDungeonMFCDlg::UpdateRound()
 {
 	UpdateData();
 	
-	round_deck_size++;
-	round_dungeon_size++;
+	round_deck_size = mandom->GetDeckSize();
+	round_dungeon_size = mandom->GetDungeonSize();
 
 	round_weapon_armor.EnableWindow(!round_weapon_armor.IsWindowEnabled());
 	round_weapon_hero_sword.EnableWindow(!round_weapon_hero_sword.IsWindowEnabled());
@@ -321,6 +322,8 @@ void CMandomOfDungeonMFCDlg::UpdateTurn()
 {
 	UpdateData();
 
+	turn_draw_monster = mandom->GetDrawMonsterName();
+
 	turn_action_pass.EnableWindow(!turn_action_pass.IsWindowEnabled());
 	turn_action_draw.EnableWindow(!turn_action_draw.IsWindowEnabled());
 
@@ -339,8 +342,8 @@ void CMandomOfDungeonMFCDlg::UpdateDungeon()
 {
 	UpdateData();
 
-	dungeon_monster_left++;
-	dungeon_armor_left++;
+	dungeon_monster_left = mandom->GetDungeonSize();
+	dungeon_armor_left = mandom->GetHeroRemaingArmor();
 
 	UpdateData(FALSE);
 
