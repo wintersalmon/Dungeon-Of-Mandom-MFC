@@ -115,10 +115,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\jacob\AppData\Local\Programs\Python\Python35;C:\Users\jacob\AppData\Local\Programs\Python\Python35\libs;C:\Users\jacob\AppData\Local\Programs\Python\Python35\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\jacob\AppData\Local\Programs\Python\Python35\libs;C:\Users\jacob\AppData\Local\Programs\Python\Python35;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -191,6 +193,8 @@
   <ItemGroup>
     <ClInclude Include="Mandom-Of-Dungeon-MFC.h" />
     <ClInclude Include="Mandom-Of-Dungeon-MFCDlg.h" />
+    <ClInclude Include="Mandom.h" />
+    <ClInclude Include="MandomController.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -198,6 +202,8 @@
   <ItemGroup>
     <ClCompile Include="Mandom-Of-Dungeon-MFC.cpp" />
     <ClCompile Include="Mandom-Of-Dungeon-MFCDlg.cpp" />
+    <ClCompile Include="Mandom.cpp" />
+    <ClCompile Include="MandomController.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

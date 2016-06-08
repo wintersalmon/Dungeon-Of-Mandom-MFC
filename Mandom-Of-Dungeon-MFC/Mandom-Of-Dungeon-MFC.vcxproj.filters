@@ -33,6 +33,12 @@
     <ClInclude Include="Resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="MandomController.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Mandom.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Mandom-Of-Dungeon-MFC.cpp">
@@ -42,6 +48,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MandomController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Mandom.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
