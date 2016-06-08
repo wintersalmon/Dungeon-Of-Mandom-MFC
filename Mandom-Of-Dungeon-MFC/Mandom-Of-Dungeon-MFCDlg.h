@@ -103,4 +103,6 @@ public:
 	bool battle_card_opend;
 	int ToggleTurnAction(int option);
 	bool can_remove_weapons;
+	afx_msg void OnBnClickedButtonAutoUpdate();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

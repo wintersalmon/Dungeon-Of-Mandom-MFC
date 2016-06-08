@@ -158,6 +158,8 @@ ON_BN_CLICKED(IDC_ROUND_WEAPON_SPEAR, &CMandomOfDungeonMFCDlg::OnBnClickedRoundW
 ON_BN_CLICKED(IDC_ROUND_WEAPON_ARMOR, &CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponArmor)
 ON_BN_CLICKED(IDC_ROUND_WEAPON_SHIELD, &CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponShield)
 ON_BN_CLICKED(IDC_ROUND_WEAPON_HERO_SWORD, &CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponHeroSword)
+ON_BN_CLICKED(IDC_BUTTON_AUTO_UPDATE, &CMandomOfDungeonMFCDlg::OnBnClickedButtonAutoUpdate)
+ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -573,4 +575,21 @@ int CMandomOfDungeonMFCDlg::ToggleTurnAction(int option)
 		break;
 	}
 	return 0;
+}
+
+void CMandomOfDungeonMFCDlg::OnBnClickedButtonAutoUpdate()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (KillTimer(100) == false)
+	{
+		SetTimer(100, 1000, NULL);
+	}
+}
+
+
+void CMandomOfDungeonMFCDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	UpdateAll();
+	CDialogEx::OnTimer(nIDEvent);
 }
