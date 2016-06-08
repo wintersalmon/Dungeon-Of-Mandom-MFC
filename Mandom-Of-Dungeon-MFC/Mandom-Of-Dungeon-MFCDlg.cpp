@@ -282,12 +282,6 @@ void CMandomOfDungeonMFCDlg::UpdatePlayers()
 	player_turn_1.SetCheck(!mandom->HasPlayerPassed(1));
 	player_turn_2.SetCheck(!mandom->HasPlayerPassed(2));
 	player_turn_3.SetCheck(!mandom->HasPlayerPassed(3));
-		/*
-	player_turn_0.SetCheck(!player_turn_0.GetCheck());
-	player_turn_1.SetCheck(!player_turn_1.GetCheck());
-	player_turn_2.SetCheck(!player_turn_2.GetCheck());
-	player_turn_3.SetCheck(!player_turn_3.GetCheck());
-	*/
 
 	player_id_0 = mandom->GetPlayerName(0);
 	player_id_1 = mandom->GetPlayerName(1);
@@ -394,13 +388,6 @@ void CMandomOfDungeonMFCDlg::UpdateBattle()
 	InvalidateStatic(&group_battle);
 }
 
-//void CMandomOfDungeonMFCDlg::UpdateEvent()
-//{
-//	UpdateData();
-//	dungeon_event += "event xxx aaa bbb\n";
-//	UpdateData(FALSE);
-//	Invalidate();
-//}
 
 void CMandomOfDungeonMFCDlg::UpdateEventList()
 {
@@ -413,7 +400,6 @@ void CMandomOfDungeonMFCDlg::UpdateEventList()
 			list_box_event.AddString(new_event_str);
 		}
 		last_event_idx = i;
-		Invalidate();
 	}
 
 }
@@ -439,7 +425,6 @@ void CMandomOfDungeonMFCDlg::UpdateAll()
 	UpdateDungeon();
 	UpdateBattle();
 	UpdateEventList();
-	Invalidate();
 }
 
 void CMandomOfDungeonMFCDlg::OnBnClickedTurnPass()
