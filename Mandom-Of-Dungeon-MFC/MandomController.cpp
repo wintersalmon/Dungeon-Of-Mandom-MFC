@@ -200,6 +200,15 @@ bool MandomController::ActionTurnPass()
 	return result;
 }
 
+bool MandomController::ActionTurnMonsterAddToDungeon()
+{
+	PyObject * monster_added = PyObject_CallMethod(pyModule, "action_turn_monster_to_dungeon", NULL);
+	assert(monster_added != NULL);
+	bool result = PyObject_IsTrue(monster_added);
+	Py_DECREF(monster_added);
+	return result;
+}
+
 
 CString MandomController::GetLatestLog()
 {
@@ -235,3 +244,4 @@ CString MandomController::GetEvent(int idx)
 	CString name(name_c);
 	Py_DECREF(event_name);
 	return name;}
+

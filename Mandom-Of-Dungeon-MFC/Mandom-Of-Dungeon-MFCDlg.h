@@ -91,4 +91,7 @@ public:
 	afx_msg void OnBnClickedTurnPass();
 	void UpdateAll();
 	int last_event_idx;
+	bool turn_card_opened;
+	afx_msg void OnBnClickedTurnDraw();
+	afx_msg void OnBnClickedTurnAddMonster();
 };

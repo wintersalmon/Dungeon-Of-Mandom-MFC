@@ -32,5 +32,6 @@ public:
 //	CString GetEvent();
 	CString GetEvent(int idx);
 	PyObject *pyGetEvent;
+	bool ActionTurnMonsterAddToDungeon();
 };
 

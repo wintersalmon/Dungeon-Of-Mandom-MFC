@@ -58,6 +58,7 @@ CMandomOfDungeonMFCDlg::CMandomOfDungeonMFCDlg(CWnd* pParent /*=NULL*/)
 	, battle_monster_damage(0)
 	, mandom(NULL)
 	, last_event_idx(0)
+	, turn_card_opened(false)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	player_id_0 = _T("");
@@ -147,6 +148,8 @@ BEGIN_MESSAGE_MAP(CMandomOfDungeonMFCDlg, CDialogEx)
 //	ON_BN_CLICKED(IDC_GROUP_DUNGEON, &CMandomOfDungeonMFCDlg::OnBnClickedGroupDungeon)
 ON_BN_CLICKED(IDC_BUTTON_UPDATE, &CMandomOfDungeonMFCDlg::OnBnClickedButtonUpdate)
 ON_BN_CLICKED(IDC_TURN_PASS, &CMandomOfDungeonMFCDlg::OnBnClickedTurnPass)
+ON_BN_CLICKED(IDC_TURN_DRAW, &CMandomOfDungeonMFCDlg::OnBnClickedTurnDraw)
+ON_BN_CLICKED(IDC_TURN_ADD_MONSTER, &CMandomOfDungeonMFCDlg::OnBnClickedTurnAddMonster)
 END_MESSAGE_MAP()
 
 
@@ -263,11 +266,11 @@ void CMandomOfDungeonMFCDlg::InvalidateStatic(CStatic * pStatic)
 void CMandomOfDungeonMFCDlg::UpdatePlayers()
 {
 	UpdateData();
-	mandom->HasPlayerPassed(0);
-	player_turn_0.SetCheck(mandom->HasPlayerPassed(0));
-	player_turn_1.SetCheck(mandom->HasPlayerPassed(1));
-	player_turn_2.SetCheck(mandom->HasPlayerPassed(2));
-	player_turn_3.SetCheck(mandom->HasPlayerPassed(3));
+
+	player_turn_0.SetCheck(!mandom->HasPlayerPassed(0));
+	player_turn_1.SetCheck(!mandom->HasPlayerPassed(1));
+	player_turn_2.SetCheck(!mandom->HasPlayerPassed(2));
+	player_turn_3.SetCheck(!mandom->HasPlayerPassed(3));
 		/*
 	player_turn_0.SetCheck(!player_turn_0.GetCheck());
 	player_turn_1.SetCheck(!player_turn_1.GetCheck());
@@ -323,8 +326,14 @@ void CMandomOfDungeonMFCDlg::UpdateRound()
 void CMandomOfDungeonMFCDlg::UpdateTurn()
 {
 	UpdateData();
-
-	turn_draw_monster = mandom->GetDrawMonsterName();
+	if (turn_card_opened)
+	{
+		turn_draw_monster = mandom->GetDrawMonsterName();
+	}
+	else
+	{
+		turn_draw_monster = "";
+	}
 	/*
 	turn_action_pass.EnableWindow(!turn_action_pass.IsWindowEnabled());
 	turn_action_draw.EnableWindow(!turn_action_draw.IsWindowEnabled());
@@ -409,4 +418,24 @@ void CMandomOfDungeonMFCDlg::UpdateAll()
 	UpdateDungeon();
 	UpdateBattle();
 	UpdateEventList();
+}
+
+
+void CMandomOfDungeonMFCDlg::OnBnClickedTurnDraw()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	turn_card_opened = true;
+	UpdateAll();
+}
+
+
+void CMandomOfDungeonMFCDlg::OnBnClickedTurnAddMonster()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (mandom->ActionTurnMonsterAddToDungeon())
+	{
+		mandom->Update();
+		turn_card_opened = false;
+		UpdateAll();
+	}
 }
