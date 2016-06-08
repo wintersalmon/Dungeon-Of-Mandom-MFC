@@ -59,6 +59,8 @@ CMandomOfDungeonMFCDlg::CMandomOfDungeonMFCDlg(CWnd* pParent /*=NULL*/)
 	, mandom(NULL)
 	, last_event_idx(0)
 	, turn_card_opened(false)
+	, battle_card_opend(false)
+	, can_remove_weapons(false)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	player_id_0 = _T("");
@@ -193,6 +195,7 @@ BOOL CMandomOfDungeonMFCDlg::OnInitDialog()
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	this->mandom = new MandomController();
 	mandom->StartGame();
+	ToggleTurnAction(0);
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -314,12 +317,14 @@ void CMandomOfDungeonMFCDlg::UpdateRound()
 	round_deck_size = mandom->GetDeckSize();
 	round_dungeon_size = mandom->GetDungeonSize();
 
-	round_weapon_torch.EnableWindow(mandom->HasWeapon(0));
-	round_weapon_holy_grail.EnableWindow(mandom->HasWeapon(1));
-	round_weapon_spear.EnableWindow(mandom->HasWeapon(2));
-	round_weapon_armor.EnableWindow(mandom->HasWeapon(3));
-	round_weapon_shield.EnableWindow(mandom->HasWeapon(4));
-	round_weapon_hero_sword.EnableWindow(mandom->HasWeapon(5));
+	round_weapon_torch.EnableWindow(mandom->HasWeapon(0) && can_remove_weapons);
+	round_weapon_holy_grail.EnableWindow(mandom->HasWeapon(1) && can_remove_weapons);
+	round_weapon_spear.EnableWindow(mandom->HasWeapon(2) && can_remove_weapons);
+	round_weapon_armor.EnableWindow(mandom->HasWeapon(3) && can_remove_weapons);
+	round_weapon_shield.EnableWindow(mandom->HasWeapon(4) && can_remove_weapons);
+	round_weapon_hero_sword.EnableWindow(mandom->HasWeapon(5) && can_remove_weapons);
+
+
 
 	UpdateData(FALSE);
 
@@ -370,9 +375,17 @@ void CMandomOfDungeonMFCDlg::UpdateDungeon()
 void CMandomOfDungeonMFCDlg::UpdateBattle()
 {
 	UpdateData();
+	if (battle_card_opend)
+	{
+		battle_monster = mandom->GetBattleMonsterName();
+		battle_monster_damage = mandom->GetBattleMonsterDamage();
+	}
+	else
+	{
+		battle_monster = "";
+		battle_monster_damage = 0;
+	}
 
-	battle_monster = mandom->GetBattleMonsterName();
-	battle_monster_damage++;
 
 	UpdateData(FALSE);
 
@@ -404,17 +417,19 @@ void CMandomOfDungeonMFCDlg::UpdateEventList()
 }
 
 
-void CMandomOfDungeonMFCDlg::OnBnClickedTurnPass()
-{
-	if (mandom->ActionTurnPass())
-	{
-		UpdateAll();
-	}
-}
+
 
 
 void CMandomOfDungeonMFCDlg::UpdateAll()
 {
+	if (mandom->IsStatusTurnStart())
+		ToggleTurnAction(1);
+
+	if (mandom->IsStatusBattleStart())
+		battle_card_opend = true;
+	else if(mandom->IsStatusBattleEnd())
+		battle_card_opend = false;
+
 	mandom->Update();
 	UpdatePlayers();
 	UpdateRound();
@@ -425,11 +440,21 @@ void CMandomOfDungeonMFCDlg::UpdateAll()
 	Invalidate();
 }
 
+void CMandomOfDungeonMFCDlg::OnBnClickedTurnPass()
+{
+	if (mandom->ActionTurnPass())
+	{
+		ToggleTurnAction(0);
+
+		UpdateAll();
+	}
+}
+
 
 void CMandomOfDungeonMFCDlg::OnBnClickedTurnDraw()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	turn_card_opened = true;
+	ToggleTurnAction(2);
 	UpdateAll();
 }
 
@@ -439,7 +464,7 @@ void CMandomOfDungeonMFCDlg::OnBnClickedTurnAddMonster()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (mandom->ActionTurnMonsterAddToDungeon())
 	{
-		turn_card_opened = false;
+		ToggleTurnAction(0);
 		UpdateAll();
 	}
 }
@@ -450,7 +475,7 @@ void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponTorch()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (mandom->ActionTurnWeaponRemove(0))
 	{
-		turn_card_opened = false;
+		ToggleTurnAction(0);
 		UpdateAll();
 	}
 }
@@ -461,7 +486,7 @@ void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponHolyGrail()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (mandom->ActionTurnWeaponRemove(1))
 	{
-		turn_card_opened = false;
+		ToggleTurnAction(0);
 		UpdateAll();
 	}
 }
@@ -472,7 +497,7 @@ void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponSpear()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (mandom->ActionTurnWeaponRemove(2))
 	{
-		turn_card_opened = false;
+		ToggleTurnAction(0);
 		UpdateAll();
 	}
 }
@@ -483,7 +508,7 @@ void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponArmor()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (mandom->ActionTurnWeaponRemove(3))
 	{
-		turn_card_opened = false;
+		ToggleTurnAction(0);
 		UpdateAll();
 	}
 }
@@ -494,7 +519,7 @@ void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponShield()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (mandom->ActionTurnWeaponRemove(4))
 	{
-		turn_card_opened = false;
+		ToggleTurnAction(0);
 		UpdateAll();
 	}
 }
@@ -505,7 +530,47 @@ void CMandomOfDungeonMFCDlg::OnBnClickedRoundWeaponHeroSword()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (mandom->ActionTurnWeaponRemove(5))
 	{
-		turn_card_opened = false;
+		ToggleTurnAction(0);
 		UpdateAll();
 	}
+}
+
+
+int CMandomOfDungeonMFCDlg::ToggleTurnAction(int option)
+{
+	switch (option)
+	{
+	case 0: // disable everything
+		turn_card_opened = false;
+		can_remove_weapons = false;
+		turn_action_pass.EnableWindow(false);
+		turn_action_draw.EnableWindow(false);
+		turn_action_add_monster.EnableWindow(false);
+		break;
+
+	case 1: // pass or draw
+		turn_card_opened = false;
+		can_remove_weapons = false;
+		turn_action_pass.EnableWindow(true);
+		turn_action_draw.EnableWindow(true);
+		turn_action_add_monster.EnableWindow(false);
+		break;
+
+	case 2: // add or remove
+		turn_card_opened = true;
+		can_remove_weapons = true;
+		turn_action_pass.EnableWindow(false);
+		turn_action_draw.EnableWindow(false);
+		turn_action_add_monster.EnableWindow(true);
+		break;
+
+	default:
+		turn_card_opened = false;
+		can_remove_weapons = false;
+		turn_action_pass.EnableWindow(false);
+		turn_action_draw.EnableWindow(false);
+		turn_action_add_monster.EnableWindow(false);
+		break;
+	}
+	return 0;
 }

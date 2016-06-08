@@ -37,5 +37,9 @@ public:
 	bool ActionTurnWeaponRemove(int weaponNumber);
 	PyObject* pyHasWeapon;
 	bool HasWeapon(int weaponNumber);
+	bool IsStatusTurnStart();
+	bool IsStatusBattleStart();
+	bool IsStatusBattleEnd();
+	int GetBattleMonsterDamage();
 };
 

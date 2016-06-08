@@ -100,4 +100,7 @@ public:
 	afx_msg void OnBnClickedRoundWeaponArmor();
 	afx_msg void OnBnClickedRoundWeaponShield();
 	afx_msg void OnBnClickedRoundWeaponHeroSword();
+	bool battle_card_opend;
+	int ToggleTurnAction(int option);
+	bool can_remove_weapons;
 };

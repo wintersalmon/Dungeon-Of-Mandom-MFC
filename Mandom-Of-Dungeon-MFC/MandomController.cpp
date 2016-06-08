@@ -193,7 +193,7 @@ bool MandomController::HasPlayerPassed(int PlayerNumber)
 	PyObject * args = PyTuple_Pack(1, number);
 	PyObject * player_passed = PyObject_CallObject(pyHasPlayerPassed, args);
 	assert(player_passed != NULL);
-	bool passed = PyLong_AsLong(player_passed);
+	bool passed = PyObject_IsTrue(player_passed);
 	Py_DECREF(player_passed);
 	return passed;
 }
@@ -274,4 +274,43 @@ bool MandomController::HasWeapon(int weaponNumber)
 	int i_result = PyLong_AsLong(result);
 	Py_DECREF(result);
 	return i_result;
+}
+
+bool MandomController::IsStatusTurnStart()
+{
+	PyObject * pyResult = PyObject_CallMethod(pyModule, "is_status_turn_start", NULL);
+	assert(pyResult != NULL);
+	bool result= PyObject_IsTrue(pyResult);
+	Py_DECREF(pyResult);
+	return result;
+}
+
+
+bool MandomController::IsStatusBattleStart()
+{
+	PyObject * pyResult = PyObject_CallMethod(pyModule, "is_status_battle_start", NULL);
+	assert(pyResult != NULL);
+	bool result = PyObject_IsTrue(pyResult);
+	Py_DECREF(pyResult);
+	return result;
+}
+
+
+bool MandomController::IsStatusBattleEnd()
+{
+	PyObject * pyResult = PyObject_CallMethod(pyModule, "is_status_battle_end", NULL);
+	assert(pyResult != NULL);
+	bool result = PyObject_IsTrue(pyResult);
+	Py_DECREF(pyResult);
+	return result;
+}
+
+
+int MandomController::GetBattleMonsterDamage()
+{
+	PyObject * damage = PyObject_CallMethod(pyModule, "get_battle_monster_damage", NULL);
+	assert(damage != NULL);
+	int i_damage = PyLong_AsLong(damage);
+	Py_DECREF(damage);
+	return i_damage;
 }
