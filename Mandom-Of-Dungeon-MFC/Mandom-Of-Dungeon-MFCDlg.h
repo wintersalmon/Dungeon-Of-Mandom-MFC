@@ -88,4 +88,7 @@ public:
 	void UpdateEventList();
 	MandomController *mandom;
 	CString turn_draw_monster;
+	afx_msg void OnBnClickedTurnPass();
+	void UpdateAll();
+	int last_event_idx;
 };

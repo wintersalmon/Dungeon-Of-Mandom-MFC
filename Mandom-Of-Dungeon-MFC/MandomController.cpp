@@ -10,6 +10,7 @@ MandomController::MandomController()
 	, pyGetPlayerName(NULL)
 	, pyGetDrawMonsterName(NULL)
 	, pyHasPlayerPassed(NULL)
+	, pyGetEvent(NULL)
 {
 	Py_Initialize();
 
@@ -35,6 +36,9 @@ MandomController::MandomController()
 
 	pyHasPlayerPassed = PyDict_GetItemString(pyDict, "has_player_passed");
 	assert(pyHasPlayerPassed != NULL);
+
+	pyGetEvent = PyDict_GetItemString(pyDict, "get_event");
+	assert(pyGetEvent != NULL);
 }
 
 
@@ -181,7 +185,7 @@ bool MandomController::HasPlayerPassed(int PlayerNumber)
 	PyObject * args = PyTuple_Pack(1, number);
 	PyObject * player_passed = PyObject_CallObject(pyHasPlayerPassed, args);
 	assert(player_passed != NULL);
-	bool passed = PyBool_Check(player_passed);
+	bool passed = PyLong_AsLong(player_passed);
 	Py_DECREF(player_passed);
 	return passed;
 }
@@ -192,6 +196,42 @@ bool MandomController::ActionTurnPass()
 	PyObject * turn_passed = PyObject_CallMethod(pyModule, "action_turn_pass", NULL);
 	assert(turn_passed != NULL);
 	bool result = PyObject_IsTrue(turn_passed);
-	Py_DECREF(turn_passed);
+	Py_DECREF(turn_passed); 
 	return result;
 }
+
+
+CString MandomController::GetLatestLog()
+{
+	PyObject * event_name = PyObject_CallMethod(pyModule, "get_last_event", NULL);
+	PyObject * utf_name = PyUnicode_AsUTF8String(event_name);
+	char * name_c = PyBytes_AsString(utf_name);
+	assert(event_name != NULL);
+	CString name(name_c);
+	Py_DECREF(event_name);
+	return name;
+}
+
+
+int MandomController::GetEventCount()
+{
+	PyObject * count = PyObject_CallMethod(pyModule, "get_event_count", NULL);
+	assert(count != NULL);
+	int i_count = PyLong_AsLong(count);
+	Py_DECREF(count);
+	return i_count;
+}
+
+
+
+CString MandomController::GetEvent(int idx)
+{
+	PyObject * number = PyLong_FromLong((long)idx);
+	PyObject * args = PyTuple_Pack(1, number);
+	PyObject * event_name = PyObject_CallObject(pyGetEvent, args);
+	PyObject * utf_name = PyUnicode_AsUTF8String(event_name);
+	char * name_c = PyBytes_AsString(utf_name);
+	assert(event_name != NULL);
+	CString name(name_c);
+	Py_DECREF(event_name);
+	return name;}

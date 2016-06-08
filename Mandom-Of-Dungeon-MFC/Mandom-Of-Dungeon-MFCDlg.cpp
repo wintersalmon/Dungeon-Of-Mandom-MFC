@@ -57,6 +57,7 @@ CMandomOfDungeonMFCDlg::CMandomOfDungeonMFCDlg(CWnd* pParent /*=NULL*/)
 	, battle_monster(_T(""))
 	, battle_monster_damage(0)
 	, mandom(NULL)
+	, last_event_idx(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	player_id_0 = _T("");
@@ -145,6 +146,7 @@ BEGIN_MESSAGE_MAP(CMandomOfDungeonMFCDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 //	ON_BN_CLICKED(IDC_GROUP_DUNGEON, &CMandomOfDungeonMFCDlg::OnBnClickedGroupDungeon)
 ON_BN_CLICKED(IDC_BUTTON_UPDATE, &CMandomOfDungeonMFCDlg::OnBnClickedButtonUpdate)
+ON_BN_CLICKED(IDC_TURN_PASS, &CMandomOfDungeonMFCDlg::OnBnClickedTurnPass)
 END_MESSAGE_MAP()
 
 
@@ -240,13 +242,7 @@ void CMandomOfDungeonMFCDlg::OnBnClickedButtonUpdate()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (mandom->IsRunning())
 	{
-		mandom->Update();
-		UpdatePlayers();
-		UpdateRound();
-		UpdateTurn();
-		UpdateDungeon();
-		UpdateBattle();
-		UpdateEventList();
+		UpdateAll();
 	}
 
 
@@ -308,7 +304,7 @@ void CMandomOfDungeonMFCDlg::UpdateRound()
 	
 	round_deck_size = mandom->GetDeckSize();
 	round_dungeon_size = mandom->GetDungeonSize();
-
+	/*
 	round_weapon_armor.EnableWindow(!round_weapon_armor.IsWindowEnabled());
 	round_weapon_hero_sword.EnableWindow(!round_weapon_hero_sword.IsWindowEnabled());
 	round_weapon_holy_grail.EnableWindow(!round_weapon_holy_grail.IsWindowEnabled());
@@ -316,7 +312,7 @@ void CMandomOfDungeonMFCDlg::UpdateRound()
 	round_weapon_shield.EnableWindow(!round_weapon_shield.IsWindowEnabled());
 	round_weapon_spear.EnableWindow(!round_weapon_spear.IsWindowEnabled());
 	round_weapon_torch.EnableWindow(!round_weapon_torch.IsWindowEnabled());
-
+	*/
 	UpdateData(FALSE);
 
 	InvalidateStatic(&group_round);
@@ -329,13 +325,13 @@ void CMandomOfDungeonMFCDlg::UpdateTurn()
 	UpdateData();
 
 	turn_draw_monster = mandom->GetDrawMonsterName();
-
+	/*
 	turn_action_pass.EnableWindow(!turn_action_pass.IsWindowEnabled());
 	turn_action_draw.EnableWindow(!turn_action_draw.IsWindowEnabled());
 
 	turn_action_add_monster.EnableWindow(!turn_action_add_monster.IsWindowEnabled());
 	turn_action_remove_moster.EnableWindow(!turn_action_remove_moster.IsWindowEnabled());
-
+	*/
 	UpdateData(FALSE);
 
 	InvalidateStatic(&group_round);
@@ -379,7 +375,38 @@ void CMandomOfDungeonMFCDlg::UpdateBattle()
 
 void CMandomOfDungeonMFCDlg::UpdateEventList()
 {
-	CString new_event_str = _T("event xxx aaa bbb");
-	list_box_event.AddString(new_event_str);
-	Invalidate();
+	if (last_event_idx < mandom->GetEventCount())
+	{
+		int i = 0;
+		for ( i = last_event_idx; i < mandom->GetEventCount(); i++)
+		{
+			CString new_event_str = mandom->GetEvent(i);
+			list_box_event.AddString(new_event_str);
+		}
+		last_event_idx = i;
+		Invalidate();
+	}
+
+}
+
+
+void CMandomOfDungeonMFCDlg::OnBnClickedTurnPass()
+{
+	if (mandom->ActionTurnPass())
+	{
+		mandom->Update();
+		UpdateAll();
+	}
+}
+
+
+void CMandomOfDungeonMFCDlg::UpdateAll()
+{
+	mandom->Update();
+	UpdatePlayers();
+	UpdateRound();
+	UpdateTurn();
+	UpdateDungeon();
+	UpdateBattle();
+	UpdateEventList();
 }

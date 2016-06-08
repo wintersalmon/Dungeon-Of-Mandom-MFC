@@ -27,5 +27,10 @@ public:
 	PyObject *pyHasPlayerPassed;
 	bool HasPlayerPassed(int PlayerNumber);
 	bool ActionTurnPass();
+	CString GetLatestLog();
+	int GetEventCount();
+//	CString GetEvent();
+	CString GetEvent(int idx);
+	PyObject *pyGetEvent;
 };
 
