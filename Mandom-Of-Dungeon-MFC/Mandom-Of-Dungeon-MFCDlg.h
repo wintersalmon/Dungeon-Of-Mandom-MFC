@@ -86,4 +86,5 @@ public:
 //	CString dungeon_event;
 	CListBox list_box_event;
 	void UpdateEventList();
+	MandomController *mandom;
 };

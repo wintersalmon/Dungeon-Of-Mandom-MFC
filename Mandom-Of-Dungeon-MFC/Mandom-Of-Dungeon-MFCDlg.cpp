@@ -56,6 +56,7 @@ CMandomOfDungeonMFCDlg::CMandomOfDungeonMFCDlg(CWnd* pParent /*=NULL*/)
 	, dungeon_armor_left(0)
 	, battle_monster(_T(""))
 	, battle_monster_damage(0)
+	, mandom(NULL)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	player_id_0 = _T("");
@@ -178,7 +179,8 @@ BOOL CMandomOfDungeonMFCDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
-
+	this->mandom = new MandomController();
+	mandom->StartGame();
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -235,12 +237,17 @@ HCURSOR CMandomOfDungeonMFCDlg::OnQueryDragIcon()
 void CMandomOfDungeonMFCDlg::OnBnClickedButtonUpdate()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	UpdatePlayers();
-	UpdateRound();
-	UpdateTurn();
-	UpdateDungeon();
-	UpdateBattle();
-	UpdateEventList();
+	if (mandom->IsRunning())
+	{
+		mandom->Update();
+		UpdatePlayers();
+		UpdateRound();
+		UpdateTurn();
+		UpdateDungeon();
+		UpdateBattle();
+		UpdateEventList();
+	}
+
 
 }
 void CMandomOfDungeonMFCDlg::InvalidateStatic(CStatic * pStatic)
